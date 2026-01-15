@@ -13,6 +13,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
@@ -32,22 +33,32 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
     double maximumSpeed;
+    double turnSpeed;
     File swerveJsonDirectory;
     SwerveDrive swerveDrive;
 
     public SwerveSubsystem(){
 
-        maximumSpeed = Units.feetToMeters(4.5);
-        swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
+      // Changes speed. May not work :(
+      SmartDashboard.putString("DB/String 0", "Slider 0: Max Drive Speed (in feet)");
+      maximumSpeed = Units.feetToMeters((SmartDashboard.getNumber("DB/Slider 0", 4.5)));  // /1.5 in last years code (why?? test without?)
+
+      // Swerve things
+      swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
         try {
             swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
-    }
+      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
+        // Changes turn speed (maybe probably doesn't work)
+
+        SmartDashboard.putString("DB/String 1", "Slider 1: Max turn speed. Do not exceded ");
+        turnSpeed = Units.feetToMeters((SmartDashboard.getNumber("DB/Slider 1", swerveDrive.getMaximumChassisAngularVelocity()/2)));  // /1.5 in last years code (why?? test without?)  
+
+    }
   /**
    * Command to drive the robot using translative values and heading as angular velocity.
    *
@@ -62,7 +73,7 @@ public class SwerveSubsystem extends SubsystemBase {
       // Make the robot move
       swerveDrive.drive(new Translation2d(translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
                                           translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                        angularRotationX.getAsDouble() * swerveDrive.getMaximumChassisAngularVelocity(),
+                        angularRotationX.getAsDouble() * turnSpeed, // <- this is turn speed?
                         true,
                         false);
     });

@@ -37,7 +37,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
 
   // Auto
-  private final SendableChooser<Command> autoChooser;
+  private String selectedAuto;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -51,9 +51,8 @@ public class RobotContainer {
     configureBindings();
 
     // Path Planner
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Selection", autoChooser);
-
+    selectedAuto = "Super Duper Test";
+    SmartDashboard.putString("Auto Selection", selectedAuto);
 
     //// Event Commands
    new EventTrigger("shoot").whileTrue(Commands.print("Shooting"));
@@ -77,7 +76,7 @@ public class RobotContainer {
   // Return auto command
   public Command getAutonomousCommand() {
         try{
-        PathPlannerPath path = PathPlannerPath.fromPathFile("Super Duper Test");
+        PathPlannerPath path = PathPlannerPath.fromPathFile(SmartDashboard.getString("Auto Selection", selectedAuto));
         return AutoBuilder.followPath(path);
     } catch (Exception e) {
         DriverStation.reportError("ERROR!~!!!!!!!: " + e.getMessage(), e.getStackTrace());
