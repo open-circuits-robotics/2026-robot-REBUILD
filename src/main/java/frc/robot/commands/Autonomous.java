@@ -31,5 +31,4 @@ public class Autonomous extends Command {
     public boolean isFinished(){
         return timer.get() >= 15;
     }
-
 }

@@ -34,7 +34,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double maximumSpeed;
     File swerveJsonDirectory;
     SwerveDrive swerveDrive;
-    
+
     public SwerveSubsystem(){
 
         maximumSpeed = Units.feetToMeters(4.5);
