@@ -73,10 +73,6 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(swerveCommand);
   }
 
-  public void example(){
-    
-  }
-  
 
   // Return auto command
   public Command getAutonomousCommand() {
