@@ -1,12 +1,12 @@
 {
     "drive": {
       "type": "sparkflex",
-      "id": 4,
+      "id": 7,
       "canbus": null
     },
     "angle": {
       "type": "sparkflex",
-      "id": 3,
+      "id": 8,
       "canbus": null
     },
     "encoder": {
