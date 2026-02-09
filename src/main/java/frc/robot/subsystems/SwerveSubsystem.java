@@ -40,8 +40,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem(){
 
       // Changes speed. May not work :(
-      SmartDashboard.putString("DB/String 0", "Slider 0: Max Drive Speed (in feet)");
-      maximumSpeed = Units.feetToMeters((SmartDashboard.getNumber("DB/Slider 0", 4.5)));  // /1.5 in last years code (why?? test without?)
+      SmartDashboard.putString("DB/String 0", "Slider 0: Drive Speed");
+      maximumSpeed = Units.feetToMeters(14.5);  // /1.5 in last years code (why?? test without?)
 
       // Swerve things
       swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
@@ -56,7 +56,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Changes turn speed (maybe probably doesn't work)
 
         SmartDashboard.putString("DB/String 1", "Slider 1: Max turn speed. Do not exceded ");
-        turnSpeed = Units.feetToMeters((SmartDashboard.getNumber("DB/Slider 1", swerveDrive.getMaximumChassisAngularVelocity()/2)));  // /1.5 in last years code (why?? test without?)  
+          
 
     }
   /**
@@ -80,7 +80,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative){
-    swerveDrive.drive(translation, rotation, fieldRelative, false);
+    swerveDrive.drive(translation, rotation, false, false);
     }
 
     public Pose2d getPose(){
