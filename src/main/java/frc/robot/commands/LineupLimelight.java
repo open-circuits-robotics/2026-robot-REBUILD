@@ -15,20 +15,22 @@ public class LineupLimelight extends Command {
     protected double pitch, yaw, distToTag;
     protected boolean hasTarget;
 
-    //final values which are used to calculate distances.
+    //final values which are used to calculate distances. 
     //these should be edited according to robot specifications.
     protected final double wantedDist = 90d; //distance away that you want
     protected final double vertFOV = 48.9; //vertical camera FOV. For limelight 2, 48.9
     protected final double horiFOV = 62.5; //horizontal camera FOV. For limelight 2, 62.5
     protected final double mountingAngleDegrees = 0; //angle the camera is mounted at (unit circle style)
     public final double  targetHeight = 38.5; //height of the april tag in question
-    public final double cameraHeight = 3.5; //height of the camera once mounted on the robot
+    public final double cameraHeight = 8.5; //height of the camera once mounted on the robot
     protected final String name = "limelight-lefty"; //name of the camera being used; this is passed into most methods as a parameter
     protected final double targetID = 2; //id of the target that the camera is meant to look for
-    protected final double acceptableLRRange = 5; //robot will not re-angle if it is facing target april tag within this many degrees
-    protected final double acceptableDistRange = 1; //robot will not move forward/backward if it is near wantedDist, within this distance
+    protected final double acceptableLRRange = 10; //robot will not re-angle if it is facing target april tag within this many degrees
+    protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
 
     public LineupLimelight(){
+        //DO THIS
+        //addRequirements(limelightSubsystem);
     }
 
     @Override
@@ -40,15 +42,15 @@ public class LineupLimelight extends Command {
             pitch = (ty/2)*vertFOV; //calculates the pitch (tilt up/down)of the camera
             yaw = (tx/2)*horiFOV; //calculates the yaw (turn left/right) of the camera
             if (yaw > 0 + Math.toRadians(acceptableLRRange)){
-                System.out.println("go left");
+               // System.out.println("go left");
             } else if (yaw < 0 - Math.toRadians(acceptableLRRange)){
-                System.out.println("go right");
+                //System.out.println("go right");
             }
             distToTag = (targetHeight - cameraHeight)/Math.tan(Math.toRadians(mountingAngleDegrees + pitch)); //calculates horizontal ground distance between target and camera
             if (distToTag > wantedDist + acceptableDistRange){
-                System.out.println("go forward");
+               // System.out.println("go forward");
             } else if (distToTag < wantedDist - acceptableDistRange){
-                System.out.println("go backward");
+               // System.out.println("go backward");
             }
         }
     }

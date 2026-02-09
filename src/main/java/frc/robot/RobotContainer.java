@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
+  //private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
 
   // Auto
   private String selectedAuto;
@@ -45,7 +45,7 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
 
-  private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
+  //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
   private final LineupLimelight lineUpCommand = new LineupLimelight();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -71,9 +71,9 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     m_driverController.b().whileTrue(lineUpCommand);
-    swerveDrive.setDefaultCommand(swerveCommand);
+    //swerveDrive.setDefaultCommand(swerveCommand);
   }
 
 
