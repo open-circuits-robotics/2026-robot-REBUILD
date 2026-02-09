@@ -21,12 +21,12 @@ public class LineupLimelight extends Command {
     protected final double vertFOV = 48.9; //vertical camera FOV. For limelight 2, 48.9
     protected final double horiFOV = 62.5; //horizontal camera FOV. For limelight 2, 62.5
     protected final double mountingAngleDegrees = 0; //angle the camera is mounted at (unit circle style)
-    public final double  targetHeight = 4; //height of the april tag in question
-    public final double cameraHeight = 2; //height of the camera once mounted on the robot
+    public final double  targetHeight = 38.5; //height of the april tag in question
+    public final double cameraHeight = 3.5; //height of the camera once mounted on the robot
     protected final String name = "limelight-lefty"; //name of the camera being used; this is passed into most methods as a parameter
-    protected final double targetID = 10; //id of the target that the camera is meant to look for
+    protected final double targetID = 2; //id of the target that the camera is meant to look for
     protected final double acceptableLRRange = 15; //robot will not re-angle if it is facing target april tag within this many degrees
-    protected final double acceptableDistRange = 0.5; //robot will not move forward/backward if it is near wantedDist, within this distance
+    protected final double acceptableDistRange = 1; //robot will not move forward/backward if it is near wantedDist, within this distance
 
     public LineupLimelight(){
     }
