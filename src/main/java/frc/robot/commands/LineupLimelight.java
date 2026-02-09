@@ -25,7 +25,7 @@ public class LineupLimelight extends Command {
     public final double cameraHeight = 3.5; //height of the camera once mounted on the robot
     protected final String name = "limelight-lefty"; //name of the camera being used; this is passed into most methods as a parameter
     protected final double targetID = 2; //id of the target that the camera is meant to look for
-    protected final double acceptableLRRange = 15; //robot will not re-angle if it is facing target april tag within this many degrees
+    protected final double acceptableLRRange = 5; //robot will not re-angle if it is facing target april tag within this many degrees
     protected final double acceptableDistRange = 1; //robot will not move forward/backward if it is near wantedDist, within this distance
 
     public LineupLimelight(){
