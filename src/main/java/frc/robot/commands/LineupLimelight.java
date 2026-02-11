@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.LimelightSubsystem;
 
 //IMPORTANT NOTE!
 //In order to import frc.robot.LimelightHelpers,
@@ -27,11 +28,14 @@ public class LineupLimelight extends Command {
     protected final double targetID = 2; //id of the target that the camera is meant to look for
     protected final double acceptableLRRange = 10; //robot will not re-angle if it is facing target april tag within this many degrees
     protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
+    
+    private final LimelightSubsystem limelightSubsystem; //the subsystem for the command to work with
 
-    public LineupLimelight(){
-        //DO THIS
-        //addRequirements(limelightSubsystem);
+    public LineupLimelight(LimelightSubsystem limelightSubsystem){
+        this.limelightSubsystem = limelightSubsystem;
+        addRequirements(limelightSubsystem);
     }
+    
 
     @Override
     public void execute(){
