@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.LimelightSubsystem;
 
 //IMPORTANT NOTE!
@@ -18,15 +17,14 @@ public class LineupLimelight extends Command {
 
     //final values which are used to calculate distances. 
     //these should be edited according to robot specifications.
-    protected final double wantedDist = 90d; //distance away that you want
+    protected final double wantedDist = 90.0; //distance away that you want
     protected final double vertFOV = 48.9; //vertical camera FOV. For limelight 2, 48.9
     protected final double horiFOV = 62.5; //horizontal camera FOV. For limelight 2, 62.5
     protected final double mountingAngleDegrees = 0; //angle the camera is mounted at (unit circle style)
-    public final double  targetHeight = 38.5; //height of the april tag in question
-    public final double cameraHeight = 8.5; //height of the camera once mounted on the robot
-    protected final String name = "limelight-lefty"; //name of the camera being used; this is passed into most methods as a parameter
+    public final double  targetHeight = 30.5; //height of the april tag in question
+    public final double cameraHeight = 7.5; //height of the camera once mounted on the robot
     protected final double targetID = 2; //id of the target that the camera is meant to look for
-    protected final double acceptableLRRange = 10; //robot will not re-angle if it is facing target april tag within this many degrees
+    protected final double acceptableLRRange = 20; //robot will not re-angle if it is facing target april tag within this many degrees
     protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
     
     private final LimelightSubsystem limelightSubsystem; //the subsystem for the command to work with
@@ -39,22 +37,24 @@ public class LineupLimelight extends Command {
 
     @Override
     public void execute(){
-        hasTarget = LimelightHelpers.getTV(name); //determines if there is a target on camera
-        if (hasTarget && LimelightHelpers.getFiducialID(name) == targetID){ //if there is, and it's the right # target, proceed
-            double tx = LimelightHelpers.getTX(name); //gets x and y offsets of target (i think)
-            double ty = LimelightHelpers.getTY(name);
-            pitch = (ty/2)*vertFOV; //calculates the pitch (tilt up/down)of the camera
+        hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera
+        if (hasTarget && limelightSubsystem.getFiducialID() == targetID){ //if there is, and it's the right # target, proceed
+            double tx = limelightSubsystem.getTX(); //gets x and y offsets of target (i think)
+            double ty = limelightSubsystem.getTY();
+            pitch = (-ty/2)*vertFOV + 360; //calculates the pitch (tilt up/down)of the camera
             yaw = (tx/2)*horiFOV; //calculates the yaw (turn left/right) of the camera
             if (yaw > 0 + Math.toRadians(acceptableLRRange)){
                // System.out.println("go left");
             } else if (yaw < 0 - Math.toRadians(acceptableLRRange)){
-                //System.out.println("go right");
+               // System.out.println("go right");
             }
             distToTag = (targetHeight - cameraHeight)/Math.tan(Math.toRadians(mountingAngleDegrees + pitch)); //calculates horizontal ground distance between target and camera
+            distToTag = (targetHeight - cameraHeight)/Math.tan(Math.toRadians(mountingAngleDegrees + ty)); //calculates horizontal ground distance between target and camera
+            System.out.println("pitch is " + pitch + ", distance is " + distToTag);
             if (distToTag > wantedDist + acceptableDistRange){
-               // System.out.println("go forward");
+                //System.out.println("go forward");
             } else if (distToTag < wantedDist - acceptableDistRange){
-               // System.out.println("go backward");
+             //  System.out.println("go backward");
             }
         }
     }
