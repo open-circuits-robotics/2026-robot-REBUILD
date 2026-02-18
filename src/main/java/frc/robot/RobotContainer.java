@@ -8,12 +8,17 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+<<<<<<< HEAD
 import frc.robot.commands.IntakeBackward;
 import frc.robot.commands.IntakeForward;
+=======
+import frc.robot.commands.LineupLimelight;
+>>>>>>> limelight
 import frc.robot.commands.SwerveCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -43,8 +48,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+<<<<<<< HEAD
   private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+=======
+  private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+  //private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
+>>>>>>> limelight
 
   // Auto
   private String selectedAuto;
@@ -56,10 +66,15 @@ public class RobotContainer {
       new CommandXboxController(1);
 
 
+<<<<<<< HEAD
   private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
   private final IntakeForward intakeForward = new IntakeForward(intakeSubsystem);
   private final IntakeBackward intakeBackward = new IntakeBackward(intakeSubsystem);
   
+=======
+  //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
+  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
+>>>>>>> limelight
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -84,12 +99,18 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+<<<<<<< HEAD
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     m_shooterController.rightTrigger().whileTrue(intakeForward);
     m_shooterController.leftTrigger().whileTrue(intakeBackward);
     swerveDrive.setDefaultCommand(swerveCommand);
+=======
+    m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.b().whileTrue(lineUpCommand);
+    //swerveDrive.setDefaultCommand(swerveCommand);
+>>>>>>> limelight
   }
-  
+
 
   // Return auto command
   public Command getAutonomousCommand() {

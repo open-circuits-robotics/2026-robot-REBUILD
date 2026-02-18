@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final double intakeSpeed = 1;
+    private final double intakeSpeed = .5;
     private SparkFlex upper, lower;
 
     public IntakeSubsystem(){
@@ -17,7 +17,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //assuming "dir" is either 1 or -1 to specify direction from the Command
     public void drive(int dir){
         upper.set(intakeSpeed*dir);
-        lower.set(-intakeSpeed*dir);
+        lower.set(intakeSpeed*dir);
     }
 
     public void stop(){
