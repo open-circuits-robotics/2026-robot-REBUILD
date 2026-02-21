@@ -44,8 +44,8 @@ public class SwerveCommand extends Command {
 
     @Override
     public void execute(){
-        speedConstant = SmartDashboard.getNumber("DB/Slider 0", 0);
-        turnConstant  = SmartDashboard.getNumber("DB/Slider 1", 0);
+        speedConstant = (SmartDashboard.getNumber("DB/Slider 0", 0)*0.9)+0.5;
+        turnConstant  = (SmartDashboard.getNumber("DB/Slider 1", 0)*0.9)+0.5;
         Translation2d translation = new Translation2d(
             applyDeadband(vX.getAsDouble(), THRESHOLD) * -speedConstant, 
             applyDeadband(vY.getAsDouble(), THRESHOLD) * -speedConstant
