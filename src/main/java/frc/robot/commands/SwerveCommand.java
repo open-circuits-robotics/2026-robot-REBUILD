@@ -50,7 +50,8 @@ public class SwerveCommand extends Command {
             applyDeadband(vX.getAsDouble(), THRESHOLD) * -speedConstant, 
             applyDeadband(vY.getAsDouble(), THRESHOLD) * -speedConstant
             );
-        System.out.println(translation);
+        SmartDashboard.putString("DB/String 2", translation.toString());
+        //System.out.println(translation);
         swerve.drive(
             translation, 
             (applyDeadband(headingAdjust.getAsDouble(), THRESHOLD) * -turnConstant), false

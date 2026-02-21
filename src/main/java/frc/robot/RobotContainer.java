@@ -47,7 +47,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+  //private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
   //private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
 
   // Auto
@@ -65,7 +65,7 @@ public class RobotContainer {
   private final IntakeBackward intakeBackward = new IntakeBackward(intakeSubsystem);
   
   //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
-  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
+  //private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -94,8 +94,7 @@ public class RobotContainer {
     m_shooterController.rightTrigger().whileTrue(intakeForward);
     m_shooterController.leftTrigger().whileTrue(intakeBackward);
     swerveDrive.setDefaultCommand(swerveCommand);
-    m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.b().whileTrue(lineUpCommand);
+    //m_driverController.b().whileTrue(lineUpCommand);
     //swerveDrive.setDefaultCommand(swerveCommand);
   }
 

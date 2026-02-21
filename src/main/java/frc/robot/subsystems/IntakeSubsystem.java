@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final double intakeSpeed = .5;
+    private final double intakeSpeed = .75;
     private SparkFlex upper, lower;
 
     public IntakeSubsystem(){
@@ -21,6 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void stop(){
+        System.out.println("Stop Meathod Called");
         upper.set(0);
         lower.set(0);
     }
