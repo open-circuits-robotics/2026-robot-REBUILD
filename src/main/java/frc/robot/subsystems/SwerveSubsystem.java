@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -13,19 +12,12 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.io.File;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
-import swervelib.math.SwerveMath;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -66,38 +58,28 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param angularRotationX Rotation of the robot to set
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
-  {
-    return run(() -> {
-      // Make the robot move
-      swerveDrive.drive(new Translation2d(translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-                                          translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                        angularRotationX.getAsDouble() * turnSpeed, // <- this is turn speed?
-                        true,
-                        false);
-    });
+  
+  public void drive(Translation2d translation, double rotation, boolean fieldRelative){
+    swerveDrive.drive(translation, rotation, fieldRelative, false);
   }
 
-  public void drive(Translation2d translation, double rotation, boolean fieldRelative){
-    swerveDrive.drive(translation, rotation, false, false);
-    }
+  public Pose2d getPose(){
+    return swerveDrive.getPose();
+  }
 
-    public Pose2d getPose(){
-      return swerveDrive.getPose();
-    }
+  public void resetPose(Pose2d poseIn){
+    swerveDrive.resetOdometry(poseIn);
+  }
 
-    public void resetPose(Pose2d poseIn){
-      swerveDrive.resetOdometry(poseIn);
-    }
-
-    public ChassisSpeeds getRobotVelocity(){
-      return swerveDrive.getRobotVelocity();
-    }
+  public ChassisSpeeds getRobotVelocity(){
+    return swerveDrive.getRobotVelocity();
+  }
 
     // Path Planner
 
   public void setupPathPlanner()
     {
+      System.out.println("setupPathPlanner Called");
       // Load the RobotConfig from the GUI settings. You should probably
       // store this in your Constants file
       RobotConfig config;

@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autonomous;
 import frc.robot.commands.IntakeBackward;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.LineupLimelight;
@@ -15,17 +14,14 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
 //DRIVE 4 angle 3
@@ -43,8 +39,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  //private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-  //private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
+  private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+
 
   // Auto
   private String selectedAuto;
@@ -61,7 +57,7 @@ public class RobotContainer {
   private final IntakeBackward intakeBackward = new IntakeBackward(intakeSubsystem);
   
   //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
-  //private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
+  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -89,7 +85,7 @@ public class RobotContainer {
     m_shooterController.rightTrigger().whileTrue(intakeForward);
     m_shooterController.leftTrigger().whileTrue(intakeBackward);
     swerveDrive.setDefaultCommand(swerveCommand);
-    //m_driverController.b().whileTrue(lineUpCommand);
+    m_driverController.b().whileTrue(lineUpCommand);
     //swerveDrive.setDefaultCommand(swerveCommand);
   }
 

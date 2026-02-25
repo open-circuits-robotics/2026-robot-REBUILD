@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.lang.Math;
 
@@ -54,7 +55,7 @@ public class SwerveCommand extends Command {
         //System.out.println(translation);
         swerve.drive(
             translation, 
-            (applyDeadband(headingAdjust.getAsDouble(), THRESHOLD) * -turnConstant), false
+            (applyDeadband(headingAdjust.getAsDouble(), THRESHOLD) * -turnConstant), OperatorConstants.fieldOriented
             );
     }
    
