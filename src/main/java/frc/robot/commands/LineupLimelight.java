@@ -16,7 +16,7 @@ public class LineupLimelight extends Command {
     protected final boolean preciseDist = false;
 
     //If in relative location mode, are you calibrating? or just fully using it?
-    protected final boolean calibrationMode = true;
+    protected final boolean calibrationMode = false;
 
     //variables to measure what it currently thinks it is at
     protected double pitch, yaw, distToTag;
@@ -32,9 +32,9 @@ public class LineupLimelight extends Command {
     protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
 
     //these vlaues are used only for the relative location function
-    protected final double locX = 0;
-    protected final double locY = 0;
-    protected final double acceptableUDRange = 5;
+    protected final double locX = -2;
+    protected final double locY = 16;
+    protected final double acceptableUDRange = 1;
 
 
     //these values are used for both that precise distance function and the better relative location function
@@ -74,10 +74,10 @@ public class LineupLimelight extends Command {
             } else {
                 System.out.println("in LR range");
             }
-            if (ty > locY + acceptableUDRange){
-                System.out.println("go forward");
-            } else if (ty < locY - acceptableUDRange){
+            if (ty > locY + Math.toRadians(acceptableUDRange)){
                 System.out.println("go backward");
+            } else if (ty < locY - Math.toRadians(acceptableUDRange)){
+                System.out.println("go forward");
             } else {
                 System.out.println("in UD range");
             }
