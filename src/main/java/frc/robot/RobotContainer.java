@@ -37,7 +37,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-  //private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
+  private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
 
   // Auto
   private String selectedAuto;
@@ -48,7 +48,7 @@ public class RobotContainer {
 
 
   //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
-  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
+  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem, swerveDrive);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings

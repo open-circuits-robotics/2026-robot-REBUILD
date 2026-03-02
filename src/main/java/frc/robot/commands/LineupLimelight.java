@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 //IMPORTANT NOTE!
 //In order to import frc.robot.LimelightHelpers,
@@ -11,6 +13,8 @@ import frc.robot.subsystems.LimelightSubsystem;
 //For this import to work, make sure the LimelightHelpers.java file is in the java/frc/robot folder, with Constants.java and Main.java and the like
 
 public class LineupLimelight extends Command {
+
+    protected SwerveSubsystem swerveSubsystem;
 
     //do you want it to be precise distance measurements (doesn't work) or relative location measurements (much better)?
     protected final boolean preciseDist = false;
@@ -40,10 +44,15 @@ public class LineupLimelight extends Command {
     //these values are used for both that precise distance function and the better relative location function
     protected final double targetID = 2; //id of the target that the camera is meant to look for
     protected final double acceptableLRRange = 5; //robot will not re-angle if it is facing target april tag within this many degrees
+
+    //for driving, take same value as in SwerveCommand
+    private double speedConstant = 0.75;
+    private double turnConstant = 0.125;
     
     private final LimelightSubsystem limelightSubsystem; //the subsystem for the command to work with
 
-    public LineupLimelight(LimelightSubsystem limelightSubsystem){
+    public LineupLimelight(LimelightSubsystem limelightSubsystem, SwerveSubsystem swerveSubsystem){
+        this.swerveSubsystem = swerveSubsystem;
         this.limelightSubsystem = limelightSubsystem;
         addRequirements(limelightSubsystem);
     }
@@ -69,19 +78,35 @@ public class LineupLimelight extends Command {
             } //otherwise, proceeds to determine for both tx and ty whether they are within range, and gives directions to move accordingly
             if (tx > locX + Math.toRadians(acceptableLRRange)){
                 System.out.println("go right");
+                adjustRobotLeftRight(Math.min(1,(tx - locX)/50));
+                return;
             } else if (tx < locX - Math.toRadians(acceptableLRRange)){
                 System.out.println("go left");
+                adjustRobotLeftRight(Math.max(-1,(tx - locX)/50));
+                return;
             } else {
                 System.out.println("in LR range");
             }
             if (ty > locY + Math.toRadians(acceptableUDRange)){
                 System.out.println("go backward");
+                adjustRobotForwardBackward(Math.min(1, (ty - locY)/50));
             } else if (ty < locY - Math.toRadians(acceptableUDRange)){
                 System.out.println("go forward");
+                adjustRobotForwardBackward(Math.max(-1, (ty-locY)/50));
             } else {
                 System.out.println("in UD range");
             }
         }
+    }
+
+    public void adjustRobotForwardBackward(double amt){
+        Translation2d translation = new Translation2d(0, amt * speedConstant);
+        swerveSubsystem.drive(translation, 0, false);
+    }
+
+    public void adjustRobotLeftRight(double amt){
+        Translation2d translation = new Translation2d(0, 0);
+        swerveSubsystem.drive(translation, amt*turnConstant, true);
     }
     
 

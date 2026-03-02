@@ -25,6 +25,7 @@ public class SwerveCommand extends Command {
 
     @Override
     public void execute(){
+        System.out.println(vY.getAsDouble() + " and " + headingAdjust.getAsDouble());
         Translation2d translation = new Translation2d(vX.getAsDouble()*speedConstant, vY.getAsDouble() * speedConstant);
         swerve.drive(translation, (turnConstant*headingAdjust.getAsDouble()), false);
     }
