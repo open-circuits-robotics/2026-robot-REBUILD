@@ -42,8 +42,9 @@ public class LineupLimelight extends Command {
 
 
     //these values are used for both that precise distance function and the better relative location function
-    protected final double targetID = 2; //id of the target that the camera is meant to look for
+    protected final double[] targetIDs = {2,3}; //list of the targets that the camera is meant to look for and react to.
     protected final double acceptableLRRange = 5; //robot will not re-angle if it is facing target april tag within this many degrees
+
 
     //for driving, take same value as in SwerveCommand
     private double speedConstant = 0.75;
@@ -66,9 +67,19 @@ public class LineupLimelight extends Command {
         }
     }
 
+    public boolean idListContains(double val){
+        for (double d : targetIDs){
+            if (d == val){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //moves the robot to line up with the calibrated location by measuring the aprilTag's relative location from the camera's point of view.
     public void useRelativeLocationMeasurements(){
-        hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera
-        if (hasTarget && limelightSubsystem.getFiducialID() == targetID){ //if there is a target on camera, and the target's id number is the correct one, proceed with the code
+        hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera, sets  boolean hasTarget accordingly
+        if (hasTarget && idListContains(limelightSubsystem.getFiducialID())){ //if there is a target on camera, and the target's id number is the correct one, proceed with the code
             double tx = limelightSubsystem.getTX(); //gets x location of the target on the camera
             double ty = limelightSubsystem.getTY(); //gets y location of the target on the camera
             if (calibrationMode){ //if the robot is in calibration mode, prints out the x and y locations of the target on the camera, then ends the method
@@ -109,9 +120,12 @@ public class LineupLimelight extends Command {
         swerveSubsystem.drive(translation, amt*turnConstant, true);
     }
     
-
+    //this is the previous attempt to get the robot to line itself up by measuring distance.
+    //it didn't work, and shouldn't be used
+    //I just left it in in case we ever want to come back to it for some reason
     public void usePreciseDistanceMeasurements(){
         hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera
+        double targetID = 2; //to get rid of code error in the line below this. If this code is reestablished, go about actually implementing the targetIDs array.
         if (hasTarget && limelightSubsystem.getFiducialID() == targetID){ //if there is, and it's the right # target, proceed
             double tx = limelightSubsystem.getTX(); //gets x and y offsets of target (i think)
             double ty = limelightSubsystem.getTY();
