@@ -79,7 +79,7 @@ public class LineupLimelight extends Command {
     //moves the robot to line up with the calibrated location by measuring the aprilTag's relative location from the camera's point of view.
     public void useRelativeLocationMeasurements(){
         hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera, sets  boolean hasTarget accordingly
-        if (hasTarget && idListContains(limelightSubsystem.getFiducialID())){ //if there is a target on camera, and the target's id number is the correct one, proceed with the code
+        if (hasTarget && idListContains(limelightSubsystem.getFiducialID())){ //if there is a target on camera, and the target's id number is one of the correct ones to look for, proceed with the code
             double tx = limelightSubsystem.getTX(); //gets x location of the target on the camera
             double ty = limelightSubsystem.getTY(); //gets y location of the target on the camera
             if (calibrationMode){ //if the robot is in calibration mode, prints out the x and y locations of the target on the camera, then ends the method
