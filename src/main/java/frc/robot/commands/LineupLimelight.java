@@ -35,7 +35,7 @@ public class LineupLimelight extends Command {
     public final double cameraHeight = 7.5; //height of the camera once mounted on the robot
     protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
 
-    //these vlaues are used only for the relative location function
+    //these values are used only for the relative location function
     protected final double locX = -2;
     protected final double locY = 16;
     protected final double acceptableUDRange = 1;
