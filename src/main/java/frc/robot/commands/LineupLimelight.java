@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -33,8 +34,6 @@ public class LineupLimelight extends Command {
     protected final double mountingAngleDegrees = 0; //angle the camera is mounted at (unit circle style)
     public final double  targetHeight = 35.25; //height of the april tag in question
     public final double cameraHeight = 9.4; //height of the camera once mounted on the robot
-    protected final double targetID = 2; //id of the target that the camera is meant to look for
-    protected final double acceptableLRRange = 20; //robot will not re-angle if it is facing target april tag within this many degrees
     protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
 
     //these values are used only for the relative location function
