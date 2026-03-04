@@ -3,6 +3,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 //IMPORTANT NOTE!
 //In order to import frc.robot.LimelightHelpers,
@@ -12,12 +13,20 @@ import frc.robot.subsystems.LimelightSubsystem;
 //For this import to work, make sure the LimelightHelpers.java file is in the java/frc/robot folder, with Constants.java and Main.java and the like
 
 public class LineupLimelight extends Command {
+
+    protected SwerveSubsystem swerveSubsystem;
+
+    //do you want it to be precise distance measurements (doesn't work) or relative location measurements (much better)?
+    protected final boolean preciseDist = false;
+
+    //If in relative location mode, are you calibrating? or just fully using it?
+    protected final boolean calibrationMode = false;
+
     //variables to measure what it currently thinks it is at
     protected double pitch, yaw, distToTag;
     protected boolean hasTarget;
 
-    //final values which are used to calculate distances. 
-    //these should be edited according to robot specifications.
+    //These values are only used for the (non functional) precise distance function.
     protected final double wantedDist = 90.0; //distance away that you want
     protected final double vertFOV = 48.9; //vertical camera FOV. For limelight 2, 48.9
     protected final double horiFOV = 62.5; //horizontal camera FOV. For limelight 2, 62.5
@@ -27,18 +36,98 @@ public class LineupLimelight extends Command {
     protected final double targetID = 2; //id of the target that the camera is meant to look for
     protected final double acceptableLRRange = 20; //robot will not re-angle if it is facing target april tag within this many degrees
     protected final double acceptableDistRange = 2; //robot will not move forward/backward if it is near wantedDist, within this distance
+
+    //these values are used only for the relative location function
+    protected final double locX = -2;
+    protected final double locY = 16;
+    protected final double acceptableUDRange = 1;
+
+
+    //these values are used for both that precise distance function and the better relative location function
+    protected final double[] targetIDs = {2,3}; //list of the targets that the camera is meant to look for and react to.
+    protected final double acceptableLRRange = 5; //robot will not re-angle if it is facing target april tag within this many degrees
+
+
+    //for driving, take same value as in SwerveCommand
+    private double speedConstant = 0.75;
+    private double turnConstant = 0.125;
     
     private final LimelightSubsystem limelightSubsystem; //the subsystem for the command to work with
 
-    public LineupLimelight(LimelightSubsystem limelightSubsystem){
+    public LineupLimelight(LimelightSubsystem limelightSubsystem, SwerveSubsystem swerveSubsystem){
+        this.swerveSubsystem = swerveSubsystem;
         this.limelightSubsystem = limelightSubsystem;
         addRequirements(limelightSubsystem);
     }
-    
 
     @Override
     public void execute(){
+        if (preciseDist){
+            usePreciseDistanceMeasurements();
+        } else {
+            useRelativeLocationMeasurements();
+        }
+    }
+
+    public boolean idListContains(double val){
+        for (double d : targetIDs){
+            if (d == val){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //moves the robot to line up with the calibrated location by measuring the aprilTag's relative location from the camera's point of view.
+    public void useRelativeLocationMeasurements(){
+        hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera, sets  boolean hasTarget accordingly
+        if (hasTarget && idListContains(limelightSubsystem.getFiducialID())){ //if there is a target on camera, and the target's id number is one of the correct ones to look for, proceed with the code
+            double tx = limelightSubsystem.getTX(); //gets x location of the target on the camera
+            double ty = limelightSubsystem.getTY(); //gets y location of the target on the camera
+            if (calibrationMode){ //if the robot is in calibration mode, prints out the x and y locations of the target on the camera, then ends the method
+                System.out.println("tx: " + tx);
+                System.out.println("ty: " + ty);
+                return;
+            } //otherwise, proceeds to determine for both tx and ty whether they are within range, and gives directions to move accordingly
+            if (tx > locX + Math.toRadians(acceptableLRRange)){
+                System.out.println("go right");
+                adjustRobotLeftRight(Math.min(1,(tx - locX)/50));
+                return;
+            } else if (tx < locX - Math.toRadians(acceptableLRRange)){
+                System.out.println("go left");
+                adjustRobotLeftRight(Math.max(-1,(tx - locX)/50));
+                return;
+            } else {
+                System.out.println("in LR range");
+            }
+            if (ty > locY + Math.toRadians(acceptableUDRange)){
+                System.out.println("go backward");
+                adjustRobotForwardBackward(Math.min(1, (ty - locY)/50));
+            } else if (ty < locY - Math.toRadians(acceptableUDRange)){
+                System.out.println("go forward");
+                adjustRobotForwardBackward(Math.max(-1, (ty-locY)/50));
+            } else {
+                System.out.println("in UD range");
+            }
+        }
+    }
+
+    public void adjustRobotForwardBackward(double amt){
+        Translation2d translation = new Translation2d(0, amt * speedConstant);
+        swerveSubsystem.drive(translation, 0, false);
+    }
+
+    public void adjustRobotLeftRight(double amt){
+        Translation2d translation = new Translation2d(0, 0);
+        swerveSubsystem.drive(translation, amt*turnConstant, true);
+    }
+    
+    //this is the previous attempt to get the robot to line itself up by measuring distance.
+    //it didn't work, and shouldn't be used
+    //I just left it in in case we ever want to come back to it for some reason
+    public void usePreciseDistanceMeasurements(){
         hasTarget = limelightSubsystem.getTV(); //determines if there is a target on camera
+        double targetID = 2; //to get rid of code error in the line below this. If this code is reestablished, go about actually implementing the targetIDs array.
         if (hasTarget && limelightSubsystem.getFiducialID() == targetID){ //if there is, and it's the right # target, proceed
             double tx = limelightSubsystem.getTX(); //gets x and y offsets of target (i think)
             double ty = limelightSubsystem.getTY();

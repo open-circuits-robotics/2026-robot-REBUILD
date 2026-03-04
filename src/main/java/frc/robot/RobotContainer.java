@@ -57,7 +57,7 @@ public class RobotContainer {
   private final IntakeBackward intakeBackward = new IntakeBackward(intakeSubsystem);
   
   //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
-  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem);
+  private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem, swerveDrive);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
