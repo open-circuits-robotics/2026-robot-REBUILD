@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void stop(){
-        System.out.println("Stop Meathod Called");
+        System.out.println("Stop Method Called");
         upper.set(0);
         lower.set(0);
     }
