@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final double intakeSpeed = .75;
+    private final double intakeSpeed = .2;
     private SparkFlex upper, lower;
 
     public IntakeSubsystem(){
