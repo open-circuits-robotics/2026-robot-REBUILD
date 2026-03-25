@@ -60,7 +60,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   
   public void drive(Translation2d translation, double rotation, boolean fieldRelative){
-    swerveDrive.drive(translation, rotation, fieldRelative, false);
+    swerveDrive.drive(translation, rotation, fieldRelative, true);
     }
 
   public Pose2d getPose(){

@@ -21,7 +21,7 @@ public class LineupLimelight extends Command {
     protected final boolean preciseDist = false;
 
     //If in relative location mode, are you calibrating? or just fully using it?
-    protected final boolean calibrationMode = false;
+    protected final boolean calibrationMode = true;
 
     //variables to measure what it currently thinks it is at
     protected double pitch, yaw, distToTag;
@@ -89,25 +89,17 @@ public class LineupLimelight extends Command {
                 return;
             } //otherwise, proceeds to determine for both tx and ty whether they are within range, and gives directions to move accordingly
             if (tx > locX + Math.toRadians(acceptableLRRange)){
-                System.out.println("go right");
                 adjustRobotLeftRight(Math.min(1,(tx - locX)/50));
                 return;
             } else if (tx < locX - Math.toRadians(acceptableLRRange)){
-                System.out.println("go left");
                 adjustRobotLeftRight(Math.max(-1,(tx - locX)/50));
                 return;
-            } else {
-                System.out.println("in LR range");
-            }
+            } 
             if (ty > locY + Math.toRadians(acceptableUDRange)){
-                System.out.println("go backward");
                 adjustRobotForwardBackward(Math.min(1, (ty - locY)/50));
             } else if (ty < locY - Math.toRadians(acceptableUDRange)){
-                System.out.println("go forward");
                 adjustRobotForwardBackward(Math.max(-1, (ty-locY)/50));
-            } else {
-                System.out.println("in UD range");
-            }
+            } 
         }
     }
 
