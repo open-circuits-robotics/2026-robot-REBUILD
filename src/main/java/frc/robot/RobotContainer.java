@@ -8,16 +8,24 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.IntakeBackward;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.LineupLimelight;
+import frc.robot.commands.LineupLimelightTimed;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShooterCommandTimed;
 import frc.robot.commands.SwerveCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -40,7 +48,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveDrive = new SwerveSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
   // Auto
   private String selectedAuto;
@@ -55,49 +63,64 @@ public class RobotContainer {
   private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
   private final IntakeForward intakeForward = new IntakeForward(intakeSubsystem);
   private final IntakeBackward intakeBackward = new IntakeBackward(intakeSubsystem);
+  private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem);
   
   //private final SwerveCommand swerveCommand = new SwerveCommand(swerveDrive, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX());
   private final LineupLimelight lineUpCommand = new LineupLimelight(limelightSubsystem, swerveDrive);
+  
+  private final LineupLimelightTimed lineUpTimed = new LineupLimelightTimed(limelightSubsystem, swerveDrive);
+  private final ShooterCommandTimed shootTimed = new ShooterCommandTimed(10.0, shooterSubsystem);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+
     // Configure the trigger bindings
     configureBindings();
 
     // Path Planner
-    selectedAuto = "Super Duper Test";
-    SmartDashboard.putString("Auto Selection", selectedAuto);
+    //selectedAuto = "Super Duper Test";
+    //SmartDashboard.putString("Auto Selection", selectedAuto);
 
     //// Event Commands
    new EventTrigger("shoot").whileTrue(Commands.print("Shooting"));
-
   }
 
   /**
    * Use this method to define your trigger->command mappings. 
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     m_shooterController.rightTrigger().whileTrue(intakeForward);
     m_shooterController.leftTrigger().whileTrue(intakeBackward);
     swerveDrive.setDefaultCommand(swerveCommand);
     m_driverController.b().whileTrue(lineUpCommand);
-    //swerveDrive.setDefaultCommand(swerveCommand);
+    m_shooterController.a().whileTrue(shooterCommand);
+    m_driverController.a().onTrue(Commands.runOnce(() -> swerveDrive.resetPose(new Pose2d()), swerveDrive));
   }
 
 
   // Return auto command
   public Command getAutonomousCommand() {
-        try{
-        PathPlannerPath path = PathPlannerPath.fromPathFile(SmartDashboard.getString("Auto Selection", selectedAuto));
-        return AutoBuilder.followPath(path);
-    } catch (Exception e) {
-        DriverStation.reportError("ERROR!~!!!!!!!: " + e.getMessage(), e.getStackTrace());
-        return Commands.none();
+   return shootTimed;
+   /* 
+    swerveDrive.setupPathPlanner();
+
+    NamedCommands.registerCommand("shoot", shootTimed);
+    return new PathPlannerAuto("Backup and Shoot", true);
+    */
+    /* 
+    System.out.println("AUTONOMOUS SELECTED: " + auto_selection);
+    if (auto_selection.equals("nothing")) {
+      return null;
+    } else if (auto_selection.equals("shoot")) {
+      return shootTimed;
+    } else {
+      return null;
     }
+    */
+     
+       
+    
   }
 }

@@ -8,7 +8,7 @@ public class LimelightSubsystem extends SubsystemBase {
     private double ty;
     private boolean tv;
     private double fidID;
-    private final String name = "limelight-lefty";
+    private final String name = "limelight-righty";
 
     public LimelightSubsystem(){
 

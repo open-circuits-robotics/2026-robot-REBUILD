@@ -21,7 +21,7 @@ public class LineupLimelight extends Command {
     protected final boolean preciseDist = false;
 
     //If in relative location mode, are you calibrating? or just fully using it?
-    protected final boolean calibrationMode = true;
+    protected final boolean calibrationMode = false;
 
     //variables to measure what it currently thinks it is at
     protected double pitch, yaw, distToTag;
@@ -38,18 +38,18 @@ public class LineupLimelight extends Command {
 
     //these values are used only for the relative location function
     protected final double locX = -2;
-    protected final double locY = 16;
+    protected final double locY = 16.7;
     protected final double acceptableUDRange = 1;
 
 
     //these values are used for both that precise distance function and the better relative location function
-    protected final double[] targetIDs = {2,3}; //list of the targets that the camera is meant to look for and react to.
-    protected final double acceptableLRRange = 5; //robot will not re-angle if it is facing target april tag within this many degrees
+    protected final double[] targetIDs = {5, 10, 20, 4}; //list of the targets that the camera is meant to look for and react to.
+    protected final double acceptableLRRange = 1; //robot will not re-angle if it is facing target april tag within this many degrees
 
 
     //for driving, take same value as in SwerveCommand
-    private double speedConstant = 0.75;
-    private double turnConstant = 0.125;
+    private double speedConstant = 3.0;
+    private double turnConstant = 0.8;
     
     private final LimelightSubsystem limelightSubsystem; //the subsystem for the command to work with
 
@@ -61,11 +61,17 @@ public class LineupLimelight extends Command {
 
     @Override
     public void execute(){
+        System.out.println("running");
         if (preciseDist){
             usePreciseDistanceMeasurements();
         } else {
             useRelativeLocationMeasurements();
         }
+    }
+
+    @Override
+    public boolean isFinished(){
+        return false;
     }
 
     public boolean idListContains(double val){
@@ -89,27 +95,29 @@ public class LineupLimelight extends Command {
                 return;
             } //otherwise, proceeds to determine for both tx and ty whether they are within range, and gives directions to move accordingly
             if (tx > locX + Math.toRadians(acceptableLRRange)){
-                adjustRobotLeftRight(Math.min(1,(tx - locX)/50));
+                adjustRobotLeftRight(Math.min(1,.25));
                 return;
             } else if (tx < locX - Math.toRadians(acceptableLRRange)){
-                adjustRobotLeftRight(Math.max(-1,(tx - locX)/50));
+                adjustRobotLeftRight(Math.max(-1,-.25));
                 return;
             } 
             if (ty > locY + Math.toRadians(acceptableUDRange)){
-                adjustRobotForwardBackward(Math.min(1, (ty - locY)/50));
+                adjustRobotForwardBackward(Math.min(1, .25));
             } else if (ty < locY - Math.toRadians(acceptableUDRange)){
-                adjustRobotForwardBackward(Math.max(-1, (ty-locY)/50));
+                adjustRobotForwardBackward(Math.max(-1, -.25));
             } 
         }
     }
 
     public void adjustRobotForwardBackward(double amt){
         Translation2d translation = new Translation2d(0, amt * speedConstant);
-        swerveSubsystem.drive(translation, 0, false);
+        System.out.println("Limelight Adjusting fb");
+        swerveSubsystem.drive(translation, 0, true);
     }
 
     public void adjustRobotLeftRight(double amt){
         Translation2d translation = new Translation2d(0, 0);
+        System.out.println("Limelight Adjusting rl");
         swerveSubsystem.drive(translation, amt*turnConstant, true);
     }
     

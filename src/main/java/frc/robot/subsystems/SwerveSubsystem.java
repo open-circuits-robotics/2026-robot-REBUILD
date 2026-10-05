@@ -18,15 +18,24 @@ import swervelib.SwerveDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class SwerveSubsystem extends SubsystemBase {
     double maximumSpeed;
     double turnSpeed;
     File swerveJsonDirectory;
     SwerveDrive swerveDrive;
+
+    private final Field2d m_field = new Field2d();
+
+    private final SwerveDriveOdometry m_odometry;  
 
     public SwerveSubsystem(){
 
@@ -60,7 +69,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   
   public void drive(Translation2d translation, double rotation, boolean fieldRelative){
-    swerveDrive.drive(translation, rotation, fieldRelative, true);
+    swerveDrive.drive(translation, rotation, fieldRelative, false);
     }
 
   public Pose2d getPose(){
@@ -73,6 +82,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public ChassisSpeeds getRobotVelocity(){
     return swerveDrive.getRobotVelocity();
+  }
+
+  // Periodic function
+  @Override
+  public void periodic(){
+
+    // Elastic stuff
+    m_field.setRobotPose(m_odometry.getPoseMeters());
   }
 
     // Path Planner
