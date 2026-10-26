@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -15,6 +17,7 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-    public static final boolean fieldOriented = true;
+    public static boolean fieldOriented = SmartDashboard.getBoolean("DB/Button 0", false);
+    //fieldOriented =  SmartDashboard.getBoolean("isFieldOriented, false");
   }
 }

@@ -35,8 +35,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final Field2d m_field = new Field2d();
 
-    private final SwerveDriveOdometry m_odometry;  
-
     public SwerveSubsystem(){
 
       // Changes speed. May not work :(
@@ -89,7 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic(){
 
     // Elastic stuff
-    m_field.setRobotPose(m_odometry.getPoseMeters());
+    m_field.setRobotPose(getPose());
   }
 
     // Path Planner
